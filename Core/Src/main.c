@@ -59,7 +59,6 @@ PFTCStruct pftc;
 
 CANTxMessage can_tx;
 CANRxMessage can_rx;
-float motor_state[3];
 
 /* USER CODE END PV */
 
@@ -122,7 +121,12 @@ int main(void)
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
   HAL_TIM_Base_Start_IT(&htim3);
 
-  __HAL_TIM_SET_COMPARE(&TIM_PWM, TIM_CHANNEL_1, ((htim3.Instance->ARR))*.5f);
+  /* Turn on ADCs */
+  HAL_ADC_Start(&hadc1);
+  HAL_ADC_Start(&hadc2);
+  HAL_ADC_Start(&hadc3);
+
+  __HAL_TIM_SET_COMPARE(&TIM_PWM, TIM_CHANNEL_1, ((htim3.Instance->ARR))*.95f);
 
   printf("Hello\r\n");
   /* USER CODE END 2 */
@@ -135,12 +139,12 @@ int main(void)
 
 	  uint32_t TxMailbox;
 
-	  pack_cmd(&can_tx, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f);	// Pack commands
-	  HAL_CAN_AddTxMessage(&CAN_H, &can_tx.tx_header, can_tx.data, &TxMailbox);	// Send response
-	  HAL_CAN_GetRxMessage(&CAN_H, CAN_RX_FIFO0, &can_rx.rx_header, can_rx.data);	// Read CAN
-
-	  unpack_reply(can_rx, &motor_state);	// Unpack commands
-	  for(int i = 0; i<3; i++){printf("%f  ", motor_state[i]);}
+	  //pack_cmd(&can_tx, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f);	// Pack commands
+	  //HAL_CAN_AddTxMessage(&CAN_H, &can_tx.tx_header, can_tx.data, &TxMailbox);	// Send response
+	  //HAL_CAN_GetRxMessage(&CAN_H, CAN_RX_FIFO0, &can_rx.rx_header, can_rx.data);	// Read CAN
+	  //unpack_reply(can_rx, &motor_state);	// Unpack commands
+	  //for(int i = 0; i<3; i++){printf("%f  ", motor_state[i]);}
+	  printf("%.2f  %.2f  %.2f  %.2f  %.2f", pftc.t_water, pftc.t_heater, pftc.t_group, pftc.vel_pump, pftc.torque_pump);
 	  printf("\r\n");
 
     /* USER CODE END WHILE */

@@ -1,5 +1,5 @@
-espresso.c:12:6:analog_sample	0	static
-espresso.c:17:6:spi_sample	40	static
-espresso.c:47:6:can_sample	0	static
-espresso.c:52:7:calc_ntc_temp	0	static
-espresso.c:56:7:calc_rtd_temp	0	static
+espresso.c:32:6:spi_sample	40	static
+espresso.c:61:6:can_sample	88	static
+espresso.c:70:7:calc_ntc_temp	24	static
+espresso.c:12:6:analog_sample	40	static
+espresso.c:75:7:calc_rtd_temp	16	static
