@@ -1,7 +1,7 @@
 can.c:31:6:MX_CAN1_Init	8	static
 can.c:53:6:HAL_CAN_MspInit	40	static
-can.c:86:6:HAL_CAN_MspDeInit	8	static
-can.c:113:6:can_rx_init	0	static
-can.c:125:6:can_tx_init	0	static
-can.c:150:6:pack_cmd	72	static
-can.c:187:6:unpack_reply	24	static
+can.c:83:6:HAL_CAN_MspDeInit	0	static
+can.c:108:6:can_rx_init	0	static
+can.c:120:6:can_tx_init	0	static
+can.c:145:6:pack_cmd	72	static
+can.c:182:6:unpack_reply	24	static

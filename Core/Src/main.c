@@ -33,7 +33,8 @@
 
 #include "hw_config.h"
 #include "math_ops.h"
-
+#include "espresso.h"
+#include "structs.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -54,11 +55,12 @@
 
 /* USER CODE BEGIN PV */
 
-/* Flash Registers */
+PFTCStruct pftc;
 
 CANTxMessage can_tx;
 CANRxMessage can_rx;
 float motor_state[3];
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -114,6 +116,13 @@ int main(void)
   can_tx_init(&can_tx);
   HAL_CAN_Start(&CAN_H); //start CAN
   //__HAL_CAN_ENABLE_IT(&CAN_H, CAN_IT_RX_FIFO0_MSG_PENDING);
+
+  /* Turn on PWM */
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
+  HAL_TIM_Base_Start_IT(&htim3);
+
+  __HAL_TIM_SET_COMPARE(&TIM_PWM, TIM_CHANNEL_1, ((htim3.Instance->ARR))*.5f);
 
   printf("Hello\r\n");
   /* USER CODE END 2 */
