@@ -8,6 +8,7 @@
 
 #include "espresso.h"
 #include "structs.h"
+#include "usart.h"
 
 void analog_sample(PFTCStruct *ptfc){
 	/* Reads ADC sensors */
@@ -15,7 +16,7 @@ void analog_sample(PFTCStruct *ptfc){
 	HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
 	int adc1_raw = HAL_ADC_GetValue(&hadc1);
 	int adc2_raw = HAL_ADC_GetValue(&hadc2);
-	int adc3_raw = HAL_ADC_GetValue(&hadc3);
+	ptfc->adc_p_raw = HAL_ADC_GetValue(&hadc3);
 
 	float v_adc1 = (float)adc1_raw*3.3f/4095.0f;
 	float v_adc2 = (float)adc2_raw*3.3f/4095.0f;
@@ -25,8 +26,8 @@ void analog_sample(PFTCStruct *ptfc){
 
 	ptfc->t_heater = calc_ntc_temp(r1, R_NTC, NTC_T1, NTC_BETA);
 	ptfc->t_group = calc_ntc_temp(r2, R_NTC, NTC_T1, NTC_BETA);
-
-	ptfc->pressure = (float)adc3_raw*P_SCALE;
+	ptfc->pressure = (float)(ptfc->adc_p_raw - ptfc->adc_p_offset)*P_SCALE;
+	ptfc->pressure_filt = (1.0f-ALPHA_P)*ptfc->pressure_filt + ALPHA_P*ptfc->pressure;
 }
 
 void spi_sample(PFTCStruct *ptfc){
@@ -61,11 +62,65 @@ void spi_sample(PFTCStruct *ptfc){
 void can_sample(PFTCStruct *pftc){
 	/* Reads CAN sensors */
 	uint32_t TxMailbox;
-	pack_cmd(&can_tx, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f);	// Pack commands
-	HAL_CAN_AddTxMessage(&CAN_H, &can_tx.tx_header, can_tx.data, &TxMailbox);	// Send response
-	HAL_CAN_GetRxMessage(&CAN_H, CAN_RX_FIFO0, &can_rx.rx_header, can_rx.data);	// Read CAN
+	pack_cmd(&can_tx, 0.0f, pftc->vel_des_pump, 0.0f, pftc->k_vel_pump, pftc->torque_des_pump[0]);	// Pack commands
+	HAL_CAN_AddTxMessage(&CAN_H, &can_tx.tx_header, can_tx.data, &TxMailbox);	// Send command
+	HAL_CAN_GetRxMessage(&CAN_H, CAN_RX_FIFO0, &can_rx.rx_header, can_rx.data);	// Read response
 	unpack_reply(can_rx, pftc->motor_state);	// Unpack commands
 }
+
+void pump_enable(void){
+	uint32_t TxMailbox;
+	for(int i = 0; i<7; i++){can_tx.data[i] = 0xFF;}
+	can_tx.data[7] = 0xFC;
+	HAL_CAN_AddTxMessage(&CAN_H, &can_tx.tx_header, can_tx.data, &TxMailbox);	// Send command
+}
+
+void pump_disable(void){
+	uint32_t TxMailbox;
+	for(int i = 0; i<7; i++){can_tx.data[i] = 0xFF;}
+	can_tx.data[7] = 0xFD;
+	HAL_CAN_AddTxMessage(&CAN_H, &can_tx.tx_header, can_tx.data, &TxMailbox);	// Send command
+}
+
+void zero_sensors(PFTCStruct *pftc){
+	/* Measure  ADC offset */
+	int adc_offset = 0;
+	int n = 1000;
+
+	for (int i = 0; i<n; i++){               // Average n samples
+		analog_sample(pftc);
+		adc_offset +=  pftc->adc_p_raw;
+	 }
+	pftc->adc_p_offset = adc_offset/n;
+
+}
+
+void pressure_control(PFTCStruct *pftc){
+	/* Shift values from last sample */
+	pftc->torque_des_pump[1] = pftc->torque_des_pump[0];
+	pftc->pressure_error[1] = pftc->pressure_error[0];
+	pftc->lead[1] = pftc->lead[0];
+
+	/* Feed-forward torque */
+	float t_ff = pftc->pressure_des * PRESSURE_TO_TORQUE;
+	/* PI + Lead */
+	//pftc->k_vel_pump = .0005f;
+	pftc->pressure_error[0] = pftc->pressure_des - pftc->pressure_filt;
+	pftc->d_pressure_error = (pftc->pressure_error[0] - pftc->pressure_error[1]);
+	pftc->d_pressure_error_filt = .9f*pftc->d_pressure_error_filt + .1f*pftc->d_pressure_error;
+	pftc->lead[0] = C_LEAD*pftc->pressure_error[0] - A_LEAD*pftc->pressure_error[1] + B_LEAD*pftc->lead[1];
+	pftc->torque_des_pump[0] = K_P*pftc->pressure_error[0] + pftc->pressure_error_int + 0*KD_P*pftc->d_pressure_error_filt + K_P*pftc->lead[0] + 0*t_ff;
+	pftc->pressure_error_int += DT*K_P*pftc->pressure_error[0]/TI_P;
+
+	if(pftc->flag){
+		printf("%.1f %.1f %.4f %.6f\r\n", pftc->pressure, pftc->pressure_des, pftc->torque_des_pump[0], pftc->lead[0]*K_P);
+	}
+}
+
+void update_flow_est(PFTCStruct *pftc){
+
+}
+
 
 float calc_ntc_temp(float r, float r_nom, float t1, float beta){
 	/* Calculate ntc temperature from resistance change */

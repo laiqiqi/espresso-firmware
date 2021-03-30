@@ -21,7 +21,6 @@
 #include "can.h"
 
 /* USER CODE BEGIN 0 */
-#include "hw_config.h"
 #include "math_ops.h"
 /* USER CODE END 0 */
 
@@ -145,11 +144,11 @@ void can_tx_init(CANTxMessage *msg){
 void pack_cmd(CANTxMessage * msg, float p_des, float v_des, float kp, float kd, float t_ff){
 
      /// limit data to be within bounds ///
-     p_des = fminf(fmaxf(P_MIN, p_des), P_MAX);
-     v_des = fminf(fmaxf(V_MIN, v_des), V_MAX);
-     kp = fminf(fmaxf(KP_MIN, kp), KP_MAX);
-     kd = fminf(fmaxf(KD_MIN, kd), KD_MAX);
-     t_ff = fminf(fmaxf(T_MIN, t_ff), T_MAX);
+     p_des = fast_fminf(fast_fmaxf(P_MIN, p_des), P_MAX);
+     v_des = fast_fminf(fast_fmaxf(V_MIN, v_des), V_MAX);
+     kp = fast_fminf(fast_fmaxf(KP_MIN, kp), KP_MAX);
+     kd = fast_fminf(fast_fmaxf(KD_MIN, kd), KD_MAX);
+     t_ff = fast_fminf(fast_fmaxf(T_MIN, t_ff), T_MAX);
      /// convert floats to unsigned ints ///
      uint16_t p_int = float_to_uint(p_des, P_MIN, P_MAX, 16);
      uint16_t v_int = float_to_uint(v_des, V_MIN, V_MAX, 12);

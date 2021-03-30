@@ -19,8 +19,12 @@
 typedef struct{
 	/* Pressure/Flow/Temp Control */
 	/* Pressure/flow variables */
-	float pressure, pressure_des, pressure_error;		// Pascals
-	float d_pressure, d_pressure_error;					// Pascals/s
+	int adc_p_raw, adc_p_offset;
+	float pressure, pressure_des, pressure_filt;		// Pascals
+	float pressure_error[2];
+	float pressure_error_int;
+	float lead[2];
+	float d_pressure, d_pressure_error, d_pressure_error_filt;	// Pascals/s
 	float flow_est, flow_des, flow_error;				// mL
 	float d_flow_est;									// mL/s
 	float volume;										// mL
@@ -31,7 +35,8 @@ typedef struct{
 		};
 	};
 	float vel_des_pump;
-	float torque_des_pump;
+	float k_vel_pump;
+	float torque_des_pump[2];
 	/* Water Temp */
 	uint8_t rtd_spi_tx_buff[2];
 	uint8_t rtd_spi_rx_buff[2];
@@ -43,13 +48,20 @@ typedef struct{
 	/* Group Temp */
 	float t_group, t_group_des, t_group_error;			// C
 	float d_t_group, d_t_group_error;					// C/s
+
+	int flag;
 } PFTCStruct;
 
 
 void analog_sample(PFTCStruct *ptfc);
 void spi_sample(PFTCStruct *ptfc);
 void can_sample(PFTCStruct *pftc);
+void zero_sensors(PFTCStruct *pftc);
+void pressure_control(PFTCStruct *pftc);
+void update_flow_est(PFTCStruct *pftc);
 float calc_ntc_temp(float r, float r_nom, float t1, float beta);
 float calc_rtd_temp(float r, float r_nom, float r_ref, float a, float b);
+void pump_enable(void);
+void pump_disable(void);
 
 #endif /* INC_ESPRESSO_H_ */

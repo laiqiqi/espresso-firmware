@@ -110,6 +110,14 @@ int main(void)
   MX_CAN1_Init();
   /* USER CODE BEGIN 2 */
 
+  /* Turn on ADCs */
+  HAL_ADC_Start(&hadc1);
+  HAL_ADC_Start(&hadc2);
+  HAL_ADC_Start(&hadc3);
+
+  /* Zero Sensors */
+  zero_sensors(&pftc);
+
   /* CAN setup */
   can_rx_init(&can_rx);
   can_tx_init(&can_tx);
@@ -121,31 +129,60 @@ int main(void)
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
   HAL_TIM_Base_Start_IT(&htim3);
 
-  /* Turn on ADCs */
-  HAL_ADC_Start(&hadc1);
-  HAL_ADC_Start(&hadc2);
-  HAL_ADC_Start(&hadc3);
-
   __HAL_TIM_SET_COMPARE(&TIM_PWM, TIM_CHANNEL_1, ((htim3.Instance->ARR))*.95f);
 
-  printf("Hello\r\n");
+  /* Enable the pump over CAN */
+  HAL_Delay(1000);
+  pump_enable();
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  int count = 0;
+  int delay = 300;
+  float off2 = 6.0f*PA_PER_BAR;
+  float off = .00f;
+  float amp = .5f*PA_PER_BAR;
+  int timer = 0;
+
+  //printf("%f  %f  %f\r\n", A_LEAD, B_LEAD, C_LEAD);
+
   while (1)
   {
-	  HAL_Delay(10);
-
-	  uint32_t TxMailbox;
+	  HAL_Delay(1);
 
 	  //pack_cmd(&can_tx, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f);	// Pack commands
 	  //HAL_CAN_AddTxMessage(&CAN_H, &can_tx.tx_header, can_tx.data, &TxMailbox);	// Send response
 	  //HAL_CAN_GetRxMessage(&CAN_H, CAN_RX_FIFO0, &can_rx.rx_header, can_rx.data);	// Read CAN
 	  //unpack_reply(can_rx, &motor_state);	// Unpack commands
 	  //for(int i = 0; i<3; i++){printf("%f  ", motor_state[i]);}
-	  printf("%.2f  %.2f  %.2f  %.2f  %.2f", pftc.t_water, pftc.t_heater, pftc.t_group, pftc.vel_pump, pftc.torque_pump);
-	  printf("\r\n");
+	  //printf("%.2f  %.2f  %.2f  %.2f  %.2f %.2f", pftc.t_water, pftc.t_heater, pftc.t_group, pftc.pressure*PSI_PER_PA, pftc.vel_pump, pftc.torque_pump);
+	  //pftc.torque_des_pump = off2;
+	  pftc.pressure_des = off2;
+	  int sw = !HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13);
+	  if(sw || count != 0){
+		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET );
+		  count++;
+		  if(count > delay){
+			  float t = (float)timer*.002f;
+			  float cmd = (float)sw*(off + amp*sinf(.5f*2.0f*PI_F*t*t)) + off2;
+			  //float cmd = (float)sw*6.0f*PA_PER_BAR;
+			  //pftc.torque_des_pump = cmd;
+			  //pftc.k_vel_pump = .01f;
+			  pftc.pressure_des = cmd;
+			  count = delay;
+			  timer ++;
+		  }
+		  if(!sw){
+			  count -= 2;
+		  }
+		  //printf("%.2f %.4f %.4f %.2f\r\n", pftc.pressure, pftc.pressure_des, pftc.torque_pump, pftc.vel_pump);
+		  pftc.flag = 1;
+		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET );
+	  }
+	  else{pftc.flag = 0;}
+
 
     /* USER CODE END WHILE */
 
