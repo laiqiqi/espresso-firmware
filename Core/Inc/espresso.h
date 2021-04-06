@@ -20,6 +20,7 @@ typedef struct{
 	/* Pressure/Flow/Temp Control */
 	/* Pressure/flow variables */
 	int adc_p_raw, adc_p_offset;
+	float loop_time;
 	float pressure, pressure_des, pressure_filt;		// Pascals
 	float pressure_error[2];
 	float pressure_error_int;

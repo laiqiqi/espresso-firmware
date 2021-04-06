@@ -26,6 +26,8 @@
 #include "espresso.h"
 #include "usart.h"
 #include "structs.h"
+#include "usbd_cdc_if.h"
+#include "usb_comm.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -59,6 +61,7 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
 extern TIM_HandleTypeDef htim3;
 /* USER CODE BEGIN EV */
 
@@ -208,6 +211,7 @@ void SysTick_Handler(void)
 void TIM3_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM3_IRQn 0 */
+	pftc.loop_time += DT;
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET );
 	spi_sample(&pftc);
 	analog_sample(&pftc);
@@ -215,11 +219,36 @@ void TIM3_IRQHandler(void)
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET );
 	pressure_control(&pftc);
 	//can_sample(&pftc);
+	usb_data.out_floats[0] = pftc.loop_time;
+	usb_data.out_floats[1] = pftc.pressure_filt*BAR_PER_PA;
+	usb_data.out_floats[2] = pftc.flow_est;
+	usb_data.out_floats[3] = pftc.t_water;
+	usb_data.out_floats[4] = pftc.t_heater;
+	usb_data.out_floats[5] = pftc.t_group;
+	usb_data.out_floats[6] = pftc.vel_pump;
+	usb_data.out_floats[7] = pftc.torque_des_pump[0];
+	usb_data.out_floats[8] = pftc.torque_pump;
+
+	uint8_t busy = CDC_Transmit_FS(usb_data.out_buff, 4*N_OUTPUT);
   /* USER CODE END TIM3_IRQn 0 */
   HAL_TIM_IRQHandler(&htim3);
   /* USER CODE BEGIN TIM3_IRQn 1 */
 
   /* USER CODE END TIM3_IRQn 1 */
+}
+
+/**
+  * @brief This function handles USB On The Go FS global interrupt.
+  */
+void OTG_FS_IRQHandler(void)
+{
+  /* USER CODE BEGIN OTG_FS_IRQn 0 */
+
+  /* USER CODE END OTG_FS_IRQn 0 */
+  HAL_PCD_IRQHandler(&hpcd_USB_OTG_FS);
+  /* USER CODE BEGIN OTG_FS_IRQn 1 */
+
+  /* USER CODE END OTG_FS_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
