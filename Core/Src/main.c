@@ -131,7 +131,7 @@ int main(void)
   /* Turn on PWM */
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
-  HAL_TIM_Base_Start_IT(&htim3);
+
 
   __HAL_TIM_SET_COMPARE(&TIM_PWM, TIM_CHANNEL_1, ((htim3.Instance->ARR))*.95f);
 
@@ -139,6 +139,8 @@ int main(void)
   HAL_Delay(1000);
   pump_enable();
 
+  /* Start main interrupt */
+  HAL_TIM_Base_Start_IT(&htim3);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -154,7 +156,7 @@ int main(void)
 
   while (1)
   {
-	  HAL_Delay(1);
+	  HAL_Delay(10);
 
 	  //pack_cmd(&can_tx, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f);	// Pack commands
 	  //HAL_CAN_AddTxMessage(&CAN_H, &can_tx.tx_header, can_tx.data, &TxMailbox);	// Send response
@@ -162,7 +164,9 @@ int main(void)
 	  //unpack_reply(can_rx, &motor_state);	// Unpack commands
 	  //for(int i = 0; i<3; i++){printf("%f  ", motor_state[i]);}
 	  //printf("%.2f  %.2f  %.2f  %.2f  %.2f %.2f", pftc.t_water, pftc.t_heater, pftc.t_group, pftc.pressure*PSI_PER_PA, pftc.vel_pump, pftc.torque_pump);
+	  //printf("%.2f\r\n", pftc.pressure_des);
 	  //pftc.torque_des_pump = off2;
+	  /*
 	  pftc.pressure_des = off2;
 	  int sw = !HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13);
 	  if(sw || count != 0){
@@ -181,12 +185,13 @@ int main(void)
 		  if(!sw){
 			  count -= 2;
 		  }
+
 		  //printf("%.2f %.4f %.4f %.2f\r\n", pftc.pressure, pftc.pressure_des, pftc.torque_pump, pftc.vel_pump);
 		  pftc.flag = 1;
 		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET );
 	  }
 	  else{pftc.flag = 0;}
-
+*/
 
     /* USER CODE END WHILE */
 
@@ -217,17 +222,11 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 4;
-  RCC_OscInitStruct.PLL.PLLN = 180;
+  RCC_OscInitStruct.PLL.PLLN = 144;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-  RCC_OscInitStruct.PLL.PLLQ = 3;
+  RCC_OscInitStruct.PLL.PLLQ = 6;
   RCC_OscInitStruct.PLL.PLLR = 2;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /** Activate the Over-Drive mode
-  */
-  if (HAL_PWREx_EnableOverDrive() != HAL_OK)
   {
     Error_Handler();
   }
@@ -240,17 +239,12 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4) != HAL_OK)
   {
     Error_Handler();
   }
   PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_CLK48;
-  PeriphClkInitStruct.PLLSAI.PLLSAIM = 4;
-  PeriphClkInitStruct.PLLSAI.PLLSAIN = 96;
-  PeriphClkInitStruct.PLLSAI.PLLSAIQ = 2;
-  PeriphClkInitStruct.PLLSAI.PLLSAIP = RCC_PLLSAIP_DIV4;
-  PeriphClkInitStruct.PLLSAIDivQ = 1;
-  PeriphClkInitStruct.Clk48ClockSelection = RCC_CLK48CLKSOURCE_PLLSAIP;
+  PeriphClkInitStruct.Clk48ClockSelection = RCC_CLK48CLKSOURCE_PLLQ;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
   {
     Error_Handler();

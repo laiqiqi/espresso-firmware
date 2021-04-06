@@ -41,8 +41,9 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../USB_DEVICE/Target/usbd_conf.h ../Core/Inc/gpio.h \
  ../Core/Inc/hw_config.h ../Core/Inc/math_ops.h ../Core/Inc/espresso.h \
  ../Core/Inc/usart.h ../Core/Inc/spi.h ../Core/Inc/adc.h \
- ../Core/Inc/can.h ../Core/Inc/gpio.h ../Core/Inc/structs.h \
- ../Core/Inc/tim.h ../Core/Inc/espresso.h ../Core/Inc/usb_comm.h
+ ../Core/Inc/can.h ../Core/Inc/gpio.h ../Core/Inc/usb_comm.h \
+ ../Core/Inc/structs.h ../Core/Inc/tim.h ../Core/Inc/espresso.h \
+ ../Core/Inc/usb_comm.h
 
 ../Core/Inc/main.h:
 
@@ -155,6 +156,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/can.h:
 
 ../Core/Inc/gpio.h:
+
+../Core/Inc/usb_comm.h:
 
 ../Core/Inc/structs.h:
 

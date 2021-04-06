@@ -212,6 +212,7 @@ void TIM3_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM3_IRQn 0 */
 	pftc.loop_time += DT;
+	update_commands(&pftc, &usb_data);
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET );
 	spi_sample(&pftc);
 	analog_sample(&pftc);

@@ -15,6 +15,7 @@
 #include "adc.h"
 #include "can.h"
 #include "gpio.h"
+#include "usb_comm.h"
 
 typedef struct{
 	/* Pressure/Flow/Temp Control */
@@ -53,7 +54,7 @@ typedef struct{
 	int flag;
 } PFTCStruct;
 
-
+void update_commands(PFTCStruct *pftc, USBDataStruct *data);
 void analog_sample(PFTCStruct *ptfc);
 void spi_sample(PFTCStruct *ptfc);
 void can_sample(PFTCStruct *pftc);

@@ -10,13 +10,18 @@
 #include "structs.h"
 #include "usart.h"
 
-void analog_sample(PFTCStruct *ptfc){
+void update_commands(PFTCStruct *pftc, USBDataStruct *data){
+	pftc->pressure_des = data->in_floats[0]*PA_PER_BAR;
+}
+
+
+void analog_sample(PFTCStruct *pftc){
 	/* Reads ADC sensors */
 	HAL_ADC_Start(&hadc1);
 	HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
 	int adc1_raw = HAL_ADC_GetValue(&hadc1);
 	int adc2_raw = HAL_ADC_GetValue(&hadc2);
-	ptfc->adc_p_raw = HAL_ADC_GetValue(&hadc3);
+	pftc->adc_p_raw = HAL_ADC_GetValue(&hadc3);
 
 	float v_adc1 = (float)adc1_raw*3.3f/4095.0f;
 	float v_adc2 = (float)adc2_raw*3.3f/4095.0f;
@@ -24,39 +29,39 @@ void analog_sample(PFTCStruct *ptfc){
 	float r1 = (R_REF_NTC*v_adc1/5.0f)/(1 - v_adc1/5.0f);
 	float r2 = (R_REF_NTC*v_adc2/5.0f)/(1 - v_adc2/5.0f);
 
-	ptfc->t_heater = calc_ntc_temp(r1, R_NTC, NTC_T1, NTC_BETA);
-	ptfc->t_group = calc_ntc_temp(r2, R_NTC, NTC_T1, NTC_BETA);
-	ptfc->pressure = (float)(ptfc->adc_p_raw - ptfc->adc_p_offset)*P_SCALE;
-	ptfc->pressure_filt = (1.0f-ALPHA_P)*ptfc->pressure_filt + ALPHA_P*ptfc->pressure;
+	pftc->t_heater = calc_ntc_temp(r1, R_NTC, NTC_T1, NTC_BETA);
+	pftc->t_group = calc_ntc_temp(r2, R_NTC, NTC_T1, NTC_BETA);
+	pftc->pressure = (float)(pftc->adc_p_raw - pftc->adc_p_offset)*P_SCALE;
+	pftc->pressure_filt = (1.0f-ALPHA_P)*pftc->pressure_filt + ALPHA_P*pftc->pressure;
 }
 
-void spi_sample(PFTCStruct *ptfc){
+void spi_sample(PFTCStruct *pftc){
 	/* Reads SPI sensors */
-	ptfc->rtd_spi_tx_buff[0] = 0x80;	// register
-	ptfc->rtd_spi_tx_buff[1] = 0xD2;	//
+	pftc->rtd_spi_tx_buff[0] = 0x80;	// register
+	pftc->rtd_spi_tx_buff[1] = 0xD2;	//
 
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, GPIO_PIN_RESET ); 	// CS low
-	HAL_SPI_TransmitReceive(&hspi3, &ptfc->rtd_spi_tx_buff[0], &ptfc->rtd_spi_rx_buff[0], 1, 100);
+	HAL_SPI_TransmitReceive(&hspi3, &pftc->rtd_spi_tx_buff[0], &pftc->rtd_spi_rx_buff[0], 1, 100);
 	while( hspi3.State == HAL_SPI_STATE_BUSY );  					// wait for transmission complete
-	HAL_SPI_TransmitReceive(&hspi3, &ptfc->rtd_spi_tx_buff[1], &ptfc->rtd_spi_rx_buff[1], 1, 100);
+	HAL_SPI_TransmitReceive(&hspi3, &pftc->rtd_spi_tx_buff[1], &pftc->rtd_spi_rx_buff[1], 1, 100);
 	while( hspi3.State == HAL_SPI_STATE_BUSY );  					// wait for transmission complete
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, GPIO_PIN_SET ); 	// CS high
 
-	ptfc->rtd_spi_tx_buff[0] = 0x1;
-	ptfc->rtd_spi_tx_buff[1] = 0x0;
+	pftc->rtd_spi_tx_buff[0] = 0x1;
+	pftc->rtd_spi_tx_buff[1] = 0x0;
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, GPIO_PIN_RESET ); 	// CS low
-	HAL_SPI_TransmitReceive(&hspi3, &ptfc->rtd_spi_tx_buff[0], &ptfc->rtd_spi_rx_buff[0], 1, 100);
+	HAL_SPI_TransmitReceive(&hspi3, &pftc->rtd_spi_tx_buff[0], &pftc->rtd_spi_rx_buff[0], 1, 100);
 	while( hspi3.State == HAL_SPI_STATE_BUSY );  					// wait for transmission complete
-	HAL_SPI_TransmitReceive(&hspi3, &ptfc->rtd_spi_tx_buff[1], &ptfc->rtd_spi_rx_buff[0], 1, 100);
+	HAL_SPI_TransmitReceive(&hspi3, &pftc->rtd_spi_tx_buff[1], &pftc->rtd_spi_rx_buff[0], 1, 100);
 	while( hspi3.State == HAL_SPI_STATE_BUSY );  					// wait for transmission complete
-	HAL_SPI_TransmitReceive(&hspi3, &ptfc->rtd_spi_tx_buff[1], &ptfc->rtd_spi_rx_buff[1], 1, 100);
+	HAL_SPI_TransmitReceive(&hspi3, &pftc->rtd_spi_tx_buff[1], &pftc->rtd_spi_rx_buff[1], 1, 100);
 	while( hspi3.State == HAL_SPI_STATE_BUSY );  					// wait for transmission complete
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, GPIO_PIN_SET ); 	// CS high
 
-	uint16_t spi_word = ptfc->rtd_spi_rx_buff[0]<<7 | ptfc->rtd_spi_rx_buff[1]>>1;
+	uint16_t spi_word = pftc->rtd_spi_rx_buff[0]<<7 | pftc->rtd_spi_rx_buff[1]>>1;
 
 	float resistance = R_REF_RTD*(float)spi_word/32767.0f;
-	ptfc->t_water = calc_rtd_temp(resistance, R_RTD, R_REF_RTD, RTD_A, RTD_B);
+	pftc->t_water = calc_rtd_temp(resistance, R_RTD, R_REF_RTD, RTD_A, RTD_B);
 }
 
 void can_sample(PFTCStruct *pftc){
@@ -113,7 +118,7 @@ void pressure_control(PFTCStruct *pftc){
 	pftc->pressure_error_int += DT*K_P*pftc->pressure_error[0]/TI_P;
 
 	if(pftc->flag){
-		printf("%.1f %.1f %.4f %.6f\r\n", pftc->pressure, pftc->pressure_des, pftc->torque_des_pump[0], pftc->lead[0]*K_P);
+	//	printf("%.1f %.1f %.4f %.6f\r\n", pftc->pressure, pftc->pressure_des, pftc->torque_des_pump[0], pftc->lead[0]*K_P);
 	}
 }
 

@@ -37,8 +37,9 @@ Core/Src/stm32f4xx_it.o: ../Core/Src/stm32f4xx_it.c ../Core/Inc/main.h \
  ../Core/Inc/stm32f4xx_it.h ../Core/Inc/espresso.h \
  ../Core/Inc/hw_config.h ../Core/Inc/math_ops.h ../Core/Inc/usart.h \
  ../Core/Inc/main.h ../Core/Inc/spi.h ../Core/Inc/adc.h ../Core/Inc/can.h \
- ../Core/Inc/gpio.h ../Core/Inc/usart.h ../Core/Inc/structs.h \
- ../Core/Inc/tim.h ../Core/Inc/espresso.h ../USB_DEVICE/App/usbd_cdc_if.h \
+ ../Core/Inc/gpio.h ../Core/Inc/usb_comm.h ../Core/Inc/usart.h \
+ ../Core/Inc/structs.h ../Core/Inc/tim.h ../Core/Inc/espresso.h \
+ ../USB_DEVICE/App/usbd_cdc_if.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc/usbd_cdc.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h \
@@ -139,6 +140,8 @@ Core/Src/stm32f4xx_it.o: ../Core/Src/stm32f4xx_it.c ../Core/Inc/main.h \
 ../Core/Inc/can.h:
 
 ../Core/Inc/gpio.h:
+
+../Core/Inc/usb_comm.h:
 
 ../Core/Inc/usart.h:
 

@@ -25,7 +25,7 @@ typedef struct{
 		uint8_t in_buff[N_INPUT*4];
 		float in_floats[N_INPUT];
 		int in_ints[N_INPUT];
-	}
+	};
 
 } USBDataStruct;
 
