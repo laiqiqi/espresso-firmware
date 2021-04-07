@@ -49,8 +49,8 @@ extern CAN_HandleTypeDef hcan1;
  #define T_MAX KT*40.0f
 
 
-#define ENABLE_CMD 0xFFFF
-#define DISABLE_CMD 0x1F1F
+#define ENABLE_CMD 0xFFFC
+#define DISABLE_CMD 0xFFF
 
 /* USER CODE END Private defines */
 

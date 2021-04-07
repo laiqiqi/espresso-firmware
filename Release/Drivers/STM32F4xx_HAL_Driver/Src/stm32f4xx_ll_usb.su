@@ -39,10 +39,10 @@ stm32f4xx_ll_usb.c:1355:19:USB_HostInit	16	static
 stm32f4xx_ll_usb.c:1547:10:USB_GetHostSpeed	8	static
 stm32f4xx_ll_usb.c:1561:10:USB_GetCurrentFrame	0	static
 stm32f4xx_ll_usb.c:1592:19:USB_HC_Init	24	static
-stm32f4xx_ll_usb.c:1839:10:USB_HC_ReadInterrupt	0	static
-stm32f4xx_ll_usb.c:1853:19:USB_HC_Halt	0	static
-stm32f4xx_ll_usb.c:1916:19:USB_DoPing	0	static
-stm32f4xx_ll_usb.c:1709:19:USB_HC_StartXfer	32	static
-stm32f4xx_ll_usb.c:1940:19:USB_StopHost	8	static
-stm32f4xx_ll_usb.c:1995:19:USB_ActivateRemoteWakeup	0	static
-stm32f4xx_ll_usb.c:2013:19:USB_DeActivateRemoteWakeup	0	static
+stm32f4xx_ll_usb.c:1853:10:USB_HC_ReadInterrupt	0	static
+stm32f4xx_ll_usb.c:1867:19:USB_HC_Halt	12	static
+stm32f4xx_ll_usb.c:1940:19:USB_DoPing	0	static
+stm32f4xx_ll_usb.c:1714:19:USB_HC_StartXfer	40	static
+stm32f4xx_ll_usb.c:1964:19:USB_StopHost	8	static
+stm32f4xx_ll_usb.c:2019:19:USB_ActivateRemoteWakeup	0	static
+stm32f4xx_ll_usb.c:2037:19:USB_DeActivateRemoteWakeup	0	static
