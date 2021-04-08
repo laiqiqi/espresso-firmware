@@ -21,9 +21,9 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, ALLOC, LOAD, DATA
   8 .data         00000364  20000000  0800980c  00020000  2**2
                   CONTENTS, ALLOC, LOAD, DATA
-  9 .bss          00001ed8  20000364  08009b70  00020364  2**2
+  9 .bss          00001edc  20000364  08009b70  00020364  2**2
                   ALLOC
- 10 ._user_heap_stack 00000604  2000223c  08009b70  0002223c  2**0
+ 10 ._user_heap_stack 00000600  20002240  08009b70  00022240  2**0
                   ALLOC
  11 .ARM.attributes 00000030  00000000  00000000  00020364  2**0
                   CONTENTS, READONLY
@@ -1718,13 +1718,13 @@ Disassembly of section .text:
  80014a4:	e92d 47f3 	stmdb	sp!, {r0, r1, r4, r5, r6, r7, r8, r9, sl, lr}
  80014a8:	4606      	mov	r6, r0
  80014aa:	f24d 2380 	movw	r3, #53888	; 0xd280
- 80014ae:	f826 3f68 	strh.w	r3, [r6, #104]!
+ 80014ae:	f826 3f6c 	strh.w	r3, [r6, #108]!
  80014b2:	4604      	mov	r4, r0
  80014b4:	2200      	movs	r2, #0
  80014b6:	4843      	ldr	r0, [pc, #268]	; (80015c4 <spi_sample+0x120>)
  80014b8:	f44f 6180 	mov.w	r1, #1024	; 0x400
  80014bc:	f001 fbfe 	bl	8002cbc <HAL_GPIO_WritePin>
- 80014c0:	f104 086a 	add.w	r8, r4, #106	; 0x6a
+ 80014c0:	f104 086e 	add.w	r8, r4, #110	; 0x6e
  80014c4:	2364      	movs	r3, #100	; 0x64
  80014c6:	9300      	str	r3, [sp, #0]
  80014c8:	483f      	ldr	r0, [pc, #252]	; (80015c8 <spi_sample+0x124>)
@@ -1738,8 +1738,8 @@ Disassembly of section .text:
  80014dc:	2a02      	cmp	r2, #2
  80014de:	d0fb      	beq.n	80014d8 <spi_sample+0x34>
  80014e0:	2364      	movs	r3, #100	; 0x64
- 80014e2:	f104 0769 	add.w	r7, r4, #105	; 0x69
- 80014e6:	f104 096b 	add.w	r9, r4, #107	; 0x6b
+ 80014e2:	f104 076d 	add.w	r7, r4, #109	; 0x6d
+ 80014e6:	f104 096f 	add.w	r9, r4, #111	; 0x6f
  80014ea:	9300      	str	r3, [sp, #0]
  80014ec:	4836      	ldr	r0, [pc, #216]	; (80015c8 <spi_sample+0x124>)
  80014ee:	2301      	movs	r3, #1
@@ -1755,7 +1755,7 @@ Disassembly of section .text:
  8001508:	f04f 0a01 	mov.w	sl, #1
  800150c:	f001 fbd6 	bl	8002cbc <HAL_GPIO_WritePin>
  8001510:	482c      	ldr	r0, [pc, #176]	; (80015c4 <spi_sample+0x120>)
- 8001512:	f8a4 a068 	strh.w	sl, [r4, #104]	; 0x68
+ 8001512:	f8a4 a06c 	strh.w	sl, [r4, #108]	; 0x6c
  8001516:	2200      	movs	r2, #0
  8001518:	f44f 6180 	mov.w	r1, #1024	; 0x400
  800151c:	f001 fbce 	bl	8002cbc <HAL_GPIO_WritePin>
@@ -1793,8 +1793,8 @@ Disassembly of section .text:
  800156a:	f44f 6180 	mov.w	r1, #1024	; 0x400
  800156e:	2201      	movs	r2, #1
  8001570:	f001 fba4 	bl	8002cbc <HAL_GPIO_WritePin>
- 8001574:	f894 306b 	ldrb.w	r3, [r4, #107]	; 0x6b
- 8001578:	f894 206a 	ldrb.w	r2, [r4, #106]	; 0x6a
+ 8001574:	f894 306f 	ldrb.w	r3, [r4, #111]	; 0x6f
+ 8001578:	f894 206e 	ldrb.w	r2, [r4, #110]	; 0x6e
  800157c:	ed9f 7a13 	vldr	s14, [pc, #76]	; 80015cc <spi_sample+0x128>
  8001580:	eddf 6a13 	vldr	s13, [pc, #76]	; 80015d0 <spi_sample+0x12c>
  8001584:	ed9f 0a13 	vldr	s0, [pc, #76]	; 80015d4 <spi_sample+0x130>
@@ -1811,11 +1811,11 @@ Disassembly of section .text:
  80015ae:	ed9f 7a0c 	vldr	s14, [pc, #48]	; 80015e0 <spi_sample+0x13c>
  80015b2:	ee30 0a67 	vsub.f32	s0, s0, s15
  80015b6:	eec0 7a07 	vdiv.f32	s15, s0, s14
- 80015ba:	edc4 7a1b 	vstr	s15, [r4, #108]	; 0x6c
+ 80015ba:	edc4 7a1c 	vstr	s15, [r4, #112]	; 0x70
  80015be:	b002      	add	sp, #8
  80015c0:	e8bd 87f0 	ldmia.w	sp!, {r4, r5, r6, r7, r8, r9, sl, pc}
  80015c4:	40020400 	.word	0x40020400
- 80015c8:	2000086c 	.word	0x2000086c
+ 80015c8:	20000870 	.word	0x20000870
  80015cc:	43d70000 	.word	0x43d70000
  80015d0:	46fffe00 	.word	0x46fffe00
  80015d4:	37938316 	.word	0x37938316
@@ -1827,9 +1827,9 @@ Disassembly of section .text:
  80015e4:	b570      	push	{r4, r5, r6, lr}
  80015e6:	ed9f 1a1a 	vldr	s2, [pc, #104]	; 8001650 <can_sample+0x6c>
  80015ea:	4c1a      	ldr	r4, [pc, #104]	; (8001654 <can_sample+0x70>)
- 80015ec:	ed90 2a18 	vldr	s4, [r0, #96]	; 0x60
- 80015f0:	edd0 1a17 	vldr	s3, [r0, #92]	; 0x5c
- 80015f4:	edd0 0a16 	vldr	s1, [r0, #88]	; 0x58
+ 80015ec:	ed90 2a19 	vldr	s4, [r0, #100]	; 0x64
+ 80015f0:	edd0 1a18 	vldr	s3, [r0, #96]	; 0x60
+ 80015f4:	edd0 0a17 	vldr	s1, [r0, #92]	; 0x5c
  80015f8:	4e17      	ldr	r6, [pc, #92]	; (8001658 <can_sample+0x74>)
  80015fa:	b092      	sub	sp, #72	; 0x48
  80015fc:	eeb0 0a41 	vmov.f32	s0, s2
@@ -1842,7 +1842,7 @@ Disassembly of section .text:
  8001610:	ab11      	add	r3, sp, #68	; 0x44
  8001612:	4630      	mov	r0, r6
  8001614:	f001 f94e 	bl	80028b4 <HAL_CAN_AddTxMessage>
- 8001618:	354c      	adds	r5, #76	; 0x4c
+ 8001618:	3550      	adds	r5, #80	; 0x50
  800161a:	4623      	mov	r3, r4
  800161c:	1de2      	adds	r2, r4, #7
  800161e:	2100      	movs	r1, #0
@@ -1866,9 +1866,9 @@ Disassembly of section .text:
  800164c:	bd70      	pop	{r4, r5, r6, pc}
  800164e:	bf00      	nop
  8001650:	00000000 	.word	0x00000000
- 8001654:	200007fc 	.word	0x200007fc
+ 8001654:	20000800 	.word	0x20000800
  8001658:	20000688 	.word	0x20000688
- 800165c:	20000821 	.word	0x20000821
+ 800165c:	20000825 	.word	0x20000825
 
 08001660 <pump_enable>:
  8001660:	b507      	push	{r0, r1, r2, lr}
@@ -1889,7 +1889,7 @@ Disassembly of section .text:
  8001684:	b003      	add	sp, #12
  8001686:	f85d fb04 	ldr.w	pc, [sp], #4
  800168a:	bf00      	nop
- 800168c:	200007fc 	.word	0x200007fc
+ 800168c:	20000800 	.word	0x20000800
  8001690:	20000688 	.word	0x20000688
 
 08001694 <pressure_control>:
@@ -1905,8 +1905,8 @@ Disassembly of section .text:
  80016b6:	ee78 7a47 	vsub.f32	s15, s16, s14
  80016ba:	eeb2 7a04 	vmov.f32	s14, #36	; 0x41200000  10.0
  80016be:	eee8 8a07 	vfma.f32	s17, s16, s14
- 80016c2:	6e03      	ldr	r3, [r0, #96]	; 0x60
- 80016c4:	6643      	str	r3, [r0, #100]	; 0x64
+ 80016c2:	6e43      	ldr	r3, [r0, #100]	; 0x64
+ 80016c4:	6683      	str	r3, [r0, #104]	; 0x68
  80016c6:	ed9f 6a36 	vldr	s12, [pc, #216]	; 80017a0 <pressure_control+0x10c>
  80016ca:	edd0 6a09 	vldr	s13, [r0, #36]	; 0x24
  80016ce:	edd0 5a0d 	vldr	s11, [r0, #52]	; 0x34
@@ -1965,7 +1965,7 @@ Disassembly of section .text:
  8001778:	f7ff fa36 	bl	8000be8 <__aeabi_d2f>
  800177c:	eddf 7a0e 	vldr	s15, [pc, #56]	; 80017b8 <pressure_control+0x124>
  8001780:	ed9f 7a0e 	vldr	s14, [pc, #56]	; 80017bc <pressure_control+0x128>
- 8001784:	6620      	str	r0, [r4, #96]	; 0x60
+ 8001784:	6660      	str	r0, [r4, #100]	; 0x64
  8001786:	ee28 8a27 	vmul.f32	s16, s16, s15
  800178a:	eec8 7a07 	vdiv.f32	s15, s16, s14
  800178e:	ee77 7aa9 	vadd.f32	s15, s15, s19
@@ -1977,7 +1977,7 @@ Disassembly of section .text:
  80017a4:	3f4096bc 	.word	0x3f4096bc
  80017a8:	3f666666 	.word	0x3f666666
  80017ac:	34210fb0 	.word	0x34210fb0
- 80017b0:	339c3e56 	.word	0x339c3e56
+ 80017b0:	339c271b 	.word	0x339c271b
  80017b4:	00000000 	.word	0x00000000
  80017b8:	2eed7e99 	.word	0x2eed7e99
  80017bc:	3ccccccd 	.word	0x3ccccccd
@@ -2046,7 +2046,7 @@ Disassembly of section .text:
  8001890:	ee80 0a27 	vdiv.f32	s0, s0, s15
  8001894:	f7ff ff94 	bl	80017c0 <calc_ntc_temp>
  8001898:	eddd 1a01 	vldr	s3, [sp, #4]
- 800189c:	ed84 0a20 	vstr	s0, [r4, #128]	; 0x80
+ 800189c:	ed84 0a21 	vstr	s0, [r4, #132]	; 0x84
  80018a0:	ed9d 1a00 	vldr	s2, [sp]
  80018a4:	eef0 0a48 	vmov.f32	s1, s16
  80018a8:	eeb0 0a68 	vmov.f32	s0, s17
@@ -2056,7 +2056,7 @@ Disassembly of section .text:
  80018b6:	ee07 3a90 	vmov	s15, r3
  80018ba:	ed9f 7a13 	vldr	s14, [pc, #76]	; 8001908 <analog_sample+0x114>
  80018be:	edd4 6a05 	vldr	s13, [r4, #20]
- 80018c2:	ed84 0a25 	vstr	s0, [r4, #148]	; 0x94
+ 80018c2:	ed84 0a26 	vstr	s0, [r4, #152]	; 0x98
  80018c6:	eef8 7ae7 	vcvt.f32.s32	s15, s15
  80018ca:	ee67 7a87 	vmul.f32	s15, s15, s14
  80018ce:	ed9f 7a0f 	vldr	s14, [pc, #60]	; 800190c <analog_sample+0x118>
@@ -2308,12 +2308,12 @@ Disassembly of section .text:
  8001b7c:	e7fe      	b.n	8001b7c <main+0x9c>
  8001b7e:	bf00      	nop
  8001b80:	200005f8 	.word	0x200005f8
- 8001b84:	200008c4 	.word	0x200008c4
+ 8001b84:	200008c8 	.word	0x200008c8
  8001b88:	200005b0 	.word	0x200005b0
  8001b8c:	20000640 	.word	0x20000640
  8001b90:	20000750 	.word	0x20000750
- 8001b94:	20000820 	.word	0x20000820
- 8001b98:	200007fc 	.word	0x200007fc
+ 8001b94:	20000824 	.word	0x20000824
+ 8001b98:	20000800 	.word	0x20000800
  8001b9c:	20000688 	.word	0x20000688
  8001ba0:	3f733333 	.word	0x3f733333
 
@@ -2386,7 +2386,7 @@ Disassembly of section .text:
  8001c54:	f7ff bfa6 	b.w	8001ba4 <Error_Handler>
  8001c58:	bd08      	pop	{r3, pc}
  8001c5a:	bf00      	nop
- 8001c5c:	2000086c 	.word	0x2000086c
+ 8001c5c:	20000870 	.word	0x20000870
  8001c60:	40003c00 	.word	0x40003c00
 
 08001c64 <HAL_SPI_MspInit>:
@@ -2519,21 +2519,21 @@ Disassembly of section .text:
  8001d6e:	602b      	str	r3, [r5, #0]
  8001d70:	6ba3      	ldr	r3, [r4, #56]	; 0x38
  8001d72:	60ab      	str	r3, [r5, #8]
- 8001d74:	6ee3      	ldr	r3, [r4, #108]	; 0x6c
+ 8001d74:	6f23      	ldr	r3, [r4, #112]	; 0x70
  8001d76:	60eb      	str	r3, [r5, #12]
- 8001d78:	f8d4 3080 	ldr.w	r3, [r4, #128]	; 0x80
+ 8001d78:	f8d4 3084 	ldr.w	r3, [r4, #132]	; 0x84
  8001d7c:	edd4 7a05 	vldr	s15, [r4, #20]
  8001d80:	612b      	str	r3, [r5, #16]
  8001d82:	ed9f 7a10 	vldr	s14, [pc, #64]	; 8001dc4 <TIM3_IRQHandler+0xa4>
- 8001d86:	f8d4 3094 	ldr.w	r3, [r4, #148]	; 0x94
+ 8001d86:	f8d4 3098 	ldr.w	r3, [r4, #152]	; 0x98
  8001d8a:	616b      	str	r3, [r5, #20]
- 8001d8c:	6d23      	ldr	r3, [r4, #80]	; 0x50
+ 8001d8c:	6d63      	ldr	r3, [r4, #84]	; 0x54
  8001d8e:	61ab      	str	r3, [r5, #24]
  8001d90:	ee67 7a87 	vmul.f32	s15, s15, s14
- 8001d94:	6e23      	ldr	r3, [r4, #96]	; 0x60
+ 8001d94:	6e63      	ldr	r3, [r4, #100]	; 0x64
  8001d96:	61eb      	str	r3, [r5, #28]
  8001d98:	4628      	mov	r0, r5
- 8001d9a:	6d63      	ldr	r3, [r4, #84]	; 0x54
+ 8001d9a:	6da3      	ldr	r3, [r4, #88]	; 0x58
  8001d9c:	edc5 7a01 	vstr	s15, [r5, #4]
  8001da0:	2150      	movs	r1, #80	; 0x50
  8001da2:	622b      	str	r3, [r5, #32]
@@ -2547,13 +2547,13 @@ Disassembly of section .text:
  8001dbc:	200006b0 	.word	0x200006b0
  8001dc0:	40020400 	.word	0x40020400
  8001dc4:	3727c5ac 	.word	0x3727c5ac
- 8001dc8:	200008c4 	.word	0x200008c4
+ 8001dc8:	200008c8 	.word	0x200008c8
 
 08001dcc <OTG_FS_IRQHandler>:
  8001dcc:	4801      	ldr	r0, [pc, #4]	; (8001dd4 <OTG_FS_IRQHandler+0x8>)
  8001dce:	f001 b825 	b.w	8002e1c <HAL_PCD_IRQHandler>
  8001dd2:	bf00      	nop
- 8001dd4:	20001e24 	.word	0x20001e24
+ 8001dd4:	20001e28 	.word	0x20001e28
 
 08001dd8 <_getpid>:
  8001dd8:	2001      	movs	r0, #1
@@ -2785,7 +2785,7 @@ Disassembly of section .text:
  8001fda:	b00a      	add	sp, #40	; 0x28
  8001fdc:	bd10      	pop	{r4, pc}
  8001fde:	bf00      	nop
- 8001fe0:	200008c4 	.word	0x200008c4
+ 8001fe0:	200008c8 	.word	0x200008c8
  8001fe4:	40000400 	.word	0x40000400
 
 08001fe8 <MX_USART2_UART_Init>:
@@ -2806,7 +2806,7 @@ Disassembly of section .text:
  8002010:	f7ff bdc8 	b.w	8001ba4 <Error_Handler>
  8002014:	bd08      	pop	{r3, pc}
  8002016:	bf00      	nop
- 8002018:	2000090c 	.word	0x2000090c
+ 8002018:	20000910 	.word	0x20000910
  800201c:	40004400 	.word	0x40004400
 
 08002020 <HAL_UART_MspInit>:
@@ -2866,7 +2866,7 @@ Disassembly of section .text:
  80020a0:	b003      	add	sp, #12
  80020a2:	f85d fb04 	ldr.w	pc, [sp], #4
  80020a6:	bf00      	nop
- 80020a8:	2000090c 	.word	0x2000090c
+ 80020a8:	20000910 	.word	0x20000910
 
 080020ac <Reset_Handler>:
  80020ac:	f8df d034 	ldr.w	sp, [pc, #52]	; 80020e4 <LoopFillZerobss+0x14>
@@ -2905,7 +2905,7 @@ Disassembly of section .text:
  80020ec:	20000000 	.word	0x20000000
  80020f0:	20000364 	.word	0x20000364
  80020f4:	20000364 	.word	0x20000364
- 80020f8:	2000223c 	.word	0x2000223c
+ 80020f8:	20002240 	.word	0x20002240
 
 080020fc <ADC_IRQHandler>:
  80020fc:	e7fe      	b.n	80020fc <ADC_IRQHandler>
@@ -2970,7 +2970,7 @@ Disassembly of section .text:
  8002186:	6013      	str	r3, [r2, #0]
  8002188:	4770      	bx	lr
  800218a:	bf00      	nop
- 800218c:	20000950 	.word	0x20000950
+ 800218c:	20000954 	.word	0x20000954
  8002190:	20000004 	.word	0x20000004
 
 08002194 <HAL_GetTick>:
@@ -2978,7 +2978,7 @@ Disassembly of section .text:
  8002196:	6818      	ldr	r0, [r3, #0]
  8002198:	4770      	bx	lr
  800219a:	bf00      	nop
- 800219c:	20000950 	.word	0x20000950
+ 800219c:	20000954 	.word	0x20000954
 
 080021a0 <HAL_Delay>:
  80021a0:	b538      	push	{r3, r4, r5, lr}
@@ -9603,7 +9603,7 @@ Disassembly of section .text:
  800624a:	f7fb bcab 	b.w	8001ba4 <Error_Handler>
  800624e:	bd08      	pop	{r3, pc}
  8006250:	20000130 	.word	0x20000130
- 8006254:	20000954 	.word	0x20000954
+ 8006254:	20000958 	.word	0x20000958
  8006258:	2000000c 	.word	0x2000000c
  800625c:	2000011c 	.word	0x2000011c
 
@@ -9635,7 +9635,7 @@ Disassembly of section .text:
  8006288:	f000 fa66 	bl	8006758 <memcpy>
  800628c:	2000      	movs	r0, #0
  800628e:	bd70      	pop	{r4, r5, r6, pc}
- 8006290:	20000954 	.word	0x20000954
+ 8006290:	20000958 	.word	0x20000958
  8006294:	20000700 	.word	0x20000700
 
 08006298 <CDC_Init_FS>:
@@ -9651,9 +9651,9 @@ Disassembly of section .text:
  80062ae:	2000      	movs	r0, #0
  80062b0:	bd10      	pop	{r4, pc}
  80062b2:	bf00      	nop
- 80062b4:	20000954 	.word	0x20000954
- 80062b8:	20001424 	.word	0x20001424
- 80062bc:	20000c24 	.word	0x20000c24
+ 80062b4:	20000958 	.word	0x20000958
+ 80062b8:	20001428 	.word	0x20001428
+ 80062bc:	20000c28 	.word	0x20000c28
 
 080062c0 <CDC_Transmit_FS>:
  80062c0:	b510      	push	{r4, lr}
@@ -9671,7 +9671,7 @@ Disassembly of section .text:
  80062e2:	2001      	movs	r0, #1
  80062e4:	bd10      	pop	{r4, pc}
  80062e6:	bf00      	nop
- 80062e8:	20000954 	.word	0x20000954
+ 80062e8:	20000958 	.word	0x20000958
 
 080062ec <USBD_FS_DeviceDescriptor>:
  80062ec:	2312      	movs	r3, #18
@@ -9751,7 +9751,7 @@ Disassembly of section .text:
  800638a:	4620      	mov	r0, r4
  800638c:	bd10      	pop	{r4, pc}
  800638e:	bf00      	nop
- 8006390:	20001c24 	.word	0x20001c24
+ 8006390:	20001c28 	.word	0x20001c28
  8006394:	080093e8 	.word	0x080093e8
 
 08006398 <USBD_FS_ProductStrDescriptor>:
@@ -9764,7 +9764,7 @@ Disassembly of section .text:
  80063a6:	4620      	mov	r0, r4
  80063a8:	bd10      	pop	{r4, pc}
  80063aa:	bf00      	nop
- 80063ac:	20001c24 	.word	0x20001c24
+ 80063ac:	20001c28 	.word	0x20001c28
  80063b0:	080093ee 	.word	0x080093ee
 
 080063b4 <USBD_FS_ConfigStrDescriptor>:
@@ -9777,7 +9777,7 @@ Disassembly of section .text:
  80063c2:	4620      	mov	r0, r4
  80063c4:	bd10      	pop	{r4, pc}
  80063c6:	bf00      	nop
- 80063c8:	20001c24 	.word	0x20001c24
+ 80063c8:	20001c28 	.word	0x20001c28
  80063cc:	080093fa 	.word	0x080093fa
 
 080063d0 <USBD_FS_InterfaceStrDescriptor>:
@@ -9790,7 +9790,7 @@ Disassembly of section .text:
  80063de:	4620      	mov	r0, r4
  80063e0:	bd10      	pop	{r4, pc}
  80063e2:	bf00      	nop
- 80063e4:	20001c24 	.word	0x20001c24
+ 80063e4:	20001c28 	.word	0x20001c28
  80063e8:	08009405 	.word	0x08009405
 
 080063ec <HAL_PCD_MspInit>:
@@ -9955,7 +9955,7 @@ Disassembly of section .text:
  8006574:	f7fd f855 	bl	8003622 <HAL_PCDEx_SetTxFiFo>
  8006578:	2000      	movs	r0, #0
  800657a:	bd08      	pop	{r3, pc}
- 800657c:	20001e24 	.word	0x20001e24
+ 800657c:	20001e28 	.word	0x20001e28
 
 08006580 <USBD_LL_Start>:
  8006580:	b508      	push	{r3, lr}
@@ -13295,7 +13295,7 @@ Disassembly of section .text:
  80085e6:	b103      	cbz	r3, 80085ea <_sbrk_r+0x1a>
  80085e8:	6023      	str	r3, [r4, #0]
  80085ea:	bd38      	pop	{r3, r4, r5, pc}
- 80085ec:	2000222c 	.word	0x2000222c
+ 80085ec:	20002230 	.word	0x20002230
 
 080085f0 <__assert_func>:
  80085f0:	b51f      	push	{r0, r1, r2, r3, r4, lr}
@@ -13361,13 +13361,13 @@ Disassembly of section .text:
  8008674:	4801      	ldr	r0, [pc, #4]	; (800867c <__malloc_lock+0x8>)
  8008676:	f000 bbf1 	b.w	8008e5c <__retarget_lock_acquire_recursive>
  800867a:	bf00      	nop
- 800867c:	20002234 	.word	0x20002234
+ 800867c:	20002238 	.word	0x20002238
 
 08008680 <__malloc_unlock>:
  8008680:	4801      	ldr	r0, [pc, #4]	; (8008688 <__malloc_unlock+0x8>)
  8008682:	f000 bbec 	b.w	8008e5e <__retarget_lock_release_recursive>
  8008686:	bf00      	nop
- 8008688:	20002234 	.word	0x20002234
+ 8008688:	20002238 	.word	0x20002238
 
 0800868c <__sfputc_r>:
  800868c:	6893      	ldr	r3, [r2, #8]
@@ -14090,25 +14090,25 @@ Disassembly of section .text:
  8008cf0:	4801      	ldr	r0, [pc, #4]	; (8008cf8 <__sfp_lock_acquire+0x8>)
  8008cf2:	f000 b8b3 	b.w	8008e5c <__retarget_lock_acquire_recursive>
  8008cf6:	bf00      	nop
- 8008cf8:	20002238 	.word	0x20002238
+ 8008cf8:	2000223c 	.word	0x2000223c
 
 08008cfc <__sfp_lock_release>:
  8008cfc:	4801      	ldr	r0, [pc, #4]	; (8008d04 <__sfp_lock_release+0x8>)
  8008cfe:	f000 b8ae 	b.w	8008e5e <__retarget_lock_release_recursive>
  8008d02:	bf00      	nop
- 8008d04:	20002238 	.word	0x20002238
+ 8008d04:	2000223c 	.word	0x2000223c
 
 08008d08 <__sinit_lock_acquire>:
  8008d08:	4801      	ldr	r0, [pc, #4]	; (8008d10 <__sinit_lock_acquire+0x8>)
  8008d0a:	f000 b8a7 	b.w	8008e5c <__retarget_lock_acquire_recursive>
  8008d0e:	bf00      	nop
- 8008d10:	20002233 	.word	0x20002233
+ 8008d10:	20002237 	.word	0x20002237
 
 08008d14 <__sinit_lock_release>:
  8008d14:	4801      	ldr	r0, [pc, #4]	; (8008d1c <__sinit_lock_release+0x8>)
  8008d16:	f000 b8a2 	b.w	8008e5e <__retarget_lock_release_recursive>
  8008d1a:	bf00      	nop
- 8008d1c:	20002233 	.word	0x20002233
+ 8008d1c:	20002237 	.word	0x20002237
 
 08008d20 <__sinit>:
  8008d20:	b510      	push	{r4, lr}
@@ -14394,7 +14394,7 @@ Disassembly of section .text:
  8008fa2:	6023      	str	r3, [r4, #0]
  8008fa4:	bd38      	pop	{r3, r4, r5, pc}
  8008fa6:	bf00      	nop
- 8008fa8:	2000222c 	.word	0x2000222c
+ 8008fa8:	20002230 	.word	0x20002230
 
 08008fac <_getpid_r>:
  8008fac:	f7f8 bf14 	b.w	8001dd8 <_getpid>
@@ -14475,7 +14475,7 @@ Disassembly of section .text:
  8009052:	b103      	cbz	r3, 8009056 <_write_r+0x1e>
  8009054:	6023      	str	r3, [r4, #0]
  8009056:	bd38      	pop	{r3, r4, r5, pc}
- 8009058:	2000222c 	.word	0x2000222c
+ 8009058:	20002230 	.word	0x20002230
 
 0800905c <_close_r>:
  800905c:	b538      	push	{r3, r4, r5, lr}
@@ -14491,7 +14491,7 @@ Disassembly of section .text:
  8009072:	b103      	cbz	r3, 8009076 <_close_r+0x1a>
  8009074:	6023      	str	r3, [r4, #0]
  8009076:	bd38      	pop	{r3, r4, r5, pc}
- 8009078:	2000222c 	.word	0x2000222c
+ 8009078:	20002230 	.word	0x20002230
 
 0800907c <_fstat_r>:
  800907c:	b538      	push	{r3, r4, r5, lr}
@@ -14509,7 +14509,7 @@ Disassembly of section .text:
  8009096:	6023      	str	r3, [r4, #0]
  8009098:	bd38      	pop	{r3, r4, r5, pc}
  800909a:	bf00      	nop
- 800909c:	2000222c 	.word	0x2000222c
+ 800909c:	20002230 	.word	0x20002230
 
 080090a0 <_isatty_r>:
  80090a0:	b538      	push	{r3, r4, r5, lr}
@@ -14525,7 +14525,7 @@ Disassembly of section .text:
  80090b6:	b103      	cbz	r3, 80090ba <_isatty_r+0x1a>
  80090b8:	6023      	str	r3, [r4, #0]
  80090ba:	bd38      	pop	{r3, r4, r5, pc}
- 80090bc:	2000222c 	.word	0x2000222c
+ 80090bc:	20002230 	.word	0x20002230
 
 080090c0 <_lseek_r>:
  80090c0:	b538      	push	{r3, r4, r5, lr}
@@ -14543,7 +14543,7 @@ Disassembly of section .text:
  80090da:	b103      	cbz	r3, 80090de <_lseek_r+0x1e>
  80090dc:	6023      	str	r3, [r4, #0]
  80090de:	bd38      	pop	{r3, r4, r5, pc}
- 80090e0:	2000222c 	.word	0x2000222c
+ 80090e0:	20002230 	.word	0x20002230
 
 080090e4 <_read_r>:
  80090e4:	b538      	push	{r3, r4, r5, lr}
@@ -14561,7 +14561,7 @@ Disassembly of section .text:
  80090fe:	b103      	cbz	r3, 8009102 <_read_r+0x1e>
  8009100:	6023      	str	r3, [r4, #0]
  8009102:	bd38      	pop	{r3, r4, r5, pc}
- 8009104:	2000222c 	.word	0x2000222c
+ 8009104:	20002230 	.word	0x20002230
 
 08009108 <logf>:
  8009108:	b508      	push	{r3, lr}

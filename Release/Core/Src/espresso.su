@@ -4,8 +4,8 @@ espresso.c:67:6:can_sample	88	static
 espresso.c:76:6:pump_enable	16	static
 espresso.c:83:6:pump_disable	16	static
 espresso.c:103:6:pressure_control	40	static
-espresso.c:125:6:update_flow_est	0	static
-espresso.c:130:7:calc_ntc_temp	24	static
+espresso.c:125:6:update_flow_est	16	static
+espresso.c:134:7:calc_ntc_temp	24	static
 espresso.c:18:6:analog_sample	32	static
 espresso.c:90:6:zero_sensors	16	static
-espresso.c:135:7:calc_rtd_temp	16	static
+espresso.c:139:7:calc_rtd_temp	16	static

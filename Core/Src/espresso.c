@@ -123,7 +123,11 @@ void pressure_control(PFTCStruct *pftc){
 }
 
 void update_flow_est(PFTCStruct *pftc){
-
+	float flow_noleak = pftc->vel_pump*PUMP_DISP;
+	/* Solve pressure = C1_LEAK*flow + C2_LEAK*flow^2  for flow*/
+	float leak_flow = (-C1_LEAK + sqrtf(C1_LEAK*C1_LEAK + 4.0f*C2_LEAK*pftc->pressure_filt))/(2.0f*C2_LEAK);
+	pftc->flow_est = flow_noleak - leak_flow;
+	pftc->flow_est_filt = .9f*pftc->flow_est_filt + .1f*pftc->flow_est;
 }
 
 

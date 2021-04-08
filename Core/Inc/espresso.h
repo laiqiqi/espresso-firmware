@@ -27,7 +27,7 @@ typedef struct{
 	float pressure_error_int;
 	float lead[2];
 	float d_pressure, d_pressure_error, d_pressure_error_filt;	// Pascals/s
-	float flow_est, flow_des, flow_error;				// mL
+	float flow_est, flow_est_filt, flow_des, flow_error;				// mL
 	float d_flow_est;									// mL/s
 	float volume;										// mL
 	union{

@@ -33,9 +33,10 @@
 #define M_ID			0x1			// Motor CAN ID
 
 /* Other hardware-related constants */
-#define PUMP_DISP		.32f		// Pump displacement (ml/revolution)
-#define EFF_HYDRAULIC	.7f		// torque*eff/disp = pressure
-#define K_LEAK			.1f			// Pump leak rate (ml/s/Pa)
+#define PUMP_DISP		0.0509f		// Pump displacement (ml/rad)
+#define EFF_HYDRAULIC	.7f			// torque*eff/disp = pressure
+#define C1_LEAK			73791.8f	// Linear leak term (ml/s/Pa)
+#define C2_LEAK			12094.7f	// Quadratic leak term (ml/s/Pa^2)
 #define KT				0.02395f	// Pump motor torque constant
 
 
@@ -70,7 +71,7 @@
 #define M3_PER_ML			.000001f		// mL to cubic meter
 
 /* Calculated Pressure Control Constants */
-#define PRESSURE_TO_TORQUE	(PUMP_DISP*M3_PER_ML/(EFF_HYDRAULIC*2.0f*PI_F))	// Torque to pressure conversion with a perfect pump
+#define PRESSURE_TO_TORQUE	(PUMP_DISP*M3_PER_ML/EFF_HYDRAULIC)	// Torque to pressure conversion with a perfect pump
 #define W1_LEAD				(W_LEAD*sqrtf(ALPHA_LEAD))
 #define T_LEAD				(1.0f/W_LEAD)
 #define A_LEAD				9.752f//(ALPHA_LEAD*T_LEAD/(DT + T_LEAD))
