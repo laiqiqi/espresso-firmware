@@ -219,10 +219,10 @@ void TIM3_IRQHandler(void)
 	can_sample(&pftc);
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET );
 	pressure_control(&pftc);
-	//can_sample(&pftc);
+	update_flow_est(&pftc);
 	usb_data.out_floats[0] = pftc.loop_time;
 	usb_data.out_floats[1] = pftc.pressure_filt*BAR_PER_PA;
-	usb_data.out_floats[2] = pftc.flow_est;
+	usb_data.out_floats[2] = pftc.flow_est_filt;
 	usb_data.out_floats[3] = pftc.t_water;
 	usb_data.out_floats[4] = pftc.t_heater;
 	usb_data.out_floats[5] = pftc.t_group;

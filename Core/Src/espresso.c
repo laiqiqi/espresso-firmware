@@ -118,7 +118,7 @@ void pressure_control(PFTCStruct *pftc){
 	pftc->pressure_error_int += DT*K_P*pftc->pressure_error[0]/TI_P;
 
 	if(pftc->flag){
-	//	printf("%.1f %.1f %.4f %.6f\r\n", pftc->pressure, pftc->pressure_des, pftc->torque_des_pump[0], pftc->lead[0]*K_P);
+		printf("%.1f %.1f %.4f %.6f\r\n", pftc->pressure, pftc->pressure_des, pftc->torque_des_pump[0], pftc->lead[0]*K_P);
 	}
 }
 

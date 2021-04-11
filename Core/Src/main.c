@@ -166,7 +166,7 @@ int main(void)
 	  //printf("%.2f  %.2f  %.2f  %.2f  %.2f %.2f", pftc.t_water, pftc.t_heater, pftc.t_group, pftc.pressure*PSI_PER_PA, pftc.vel_pump, pftc.torque_pump);
 	  //printf("%.2f\r\n", pftc.pressure_des);
 	  //pftc.torque_des_pump = off2;
-	  /*
+/*
 	  pftc.pressure_des = off2;
 	  int sw = !HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13);
 	  if(sw || count != 0){
