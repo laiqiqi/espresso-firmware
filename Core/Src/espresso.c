@@ -11,7 +11,9 @@
 #include "usart.h"
 
 void update_commands(PFTCStruct *pftc, USBDataStruct *data){
-	pftc->pressure_des = data->in_floats[0]*PA_PER_BAR;
+	float pump_cmd = data->in_floats[0];
+	pftc->pressure_des =pump_cmd*PA_PER_BAR;
+	pftc->t_water_des = data->in_floats[1];
 }
 
 
@@ -125,11 +127,48 @@ void pressure_control(PFTCStruct *pftc){
 void update_flow_est(PFTCStruct *pftc){
 	float flow_noleak = pftc->vel_pump*PUMP_DISP;
 	/* Solve pressure = C1_LEAK*flow + C2_LEAK*flow^2  for flow*/
-	float leak_flow = (-C1_LEAK + sqrtf(C1_LEAK*C1_LEAK + 4.0f*C2_LEAK*pftc->pressure_filt))/(2.0f*C2_LEAK);
-	pftc->flow_est = flow_noleak - leak_flow;
+	pftc->leak_flow = (-C1_LEAK + sqrtf(C1_LEAK*C1_LEAK + 4.0f*C2_LEAK*pftc->pressure_filt))/(2.0f*C2_LEAK);
+	pftc->flow_est = flow_noleak - pftc->leak_flow;
 	pftc->flow_est_filt = .9f*pftc->flow_est_filt + .1f*pftc->flow_est;
 }
 
+void flow_control(PFTCStruct *pftc){
+	pftc->k_vel_pump = .0005f;
+	pftc->vel_des_pump = (pftc->flow_des + pftc->leak_flow)/PUMP_DISP;
+}
+
+void group_temp_control(PFTCStruct *pftc){
+	pftc->t_group_des = pftc->t_water_des;
+	float error = pftc->t_group_des - pftc->t_group;
+	pftc->d_t_group_error = .9f*pftc->d_t_group_error + .1f*(error - pftc->t_group_error)/DT;
+	pftc->t_group_error = error;
+	pftc->t_group_int += K_T_GROUP*KI_T_GROUP*DT*error;
+	pftc->t_group_int = fminf(fmaxf(-P_MAX_GROUP, pftc->t_group_int), P_MAX_GROUP);
+	pftc->p_group_heater = P_MAX_GROUP*(error>0) - P_MAX_GROUP*(error<0);
+	pftc->p_group_heater = K_T_GROUP*error;
+	pftc->p_group_heater += KD_T_GROUP*pftc->d_t_group_error;
+	pftc->p_group_heater += pftc->t_group_int;
+
+
+	//pftc->p_group_heater = 50.0f;
+	float dtc = pftc->p_group_heater/P_MAX_GROUP;
+	dtc = fminf(fmaxf(0.0f, dtc), 1.0f);
+	__HAL_TIM_SET_COMPARE(&TIM_PWM, TIM_CH_GH, ((TIM_PWM.Instance->ARR))*dtc);
+
+}
+
+void heater_temp_control(PFTCStruct *pftc){
+	float dtc = .1f;
+	__HAL_TIM_SET_COMPARE(&TIM_PWM, TIM_CH_WH, ((TIM_PWM.Instance->ARR))*dtc);
+}
+
+void water_temp_control(PFTCStruct *pftc){
+
+}
+
+void set_valves(PFTCStruct *pftc){
+
+}
 
 float calc_ntc_temp(float r, float r_nom, float t1, float beta){
 	/* Calculate ntc temperature from resistance change */

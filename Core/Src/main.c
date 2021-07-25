@@ -133,7 +133,6 @@ int main(void)
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
 
 
-  __HAL_TIM_SET_COMPARE(&TIM_PWM, TIM_CHANNEL_1, ((htim3.Instance->ARR))*.95f);
 
   /* Enable the pump over CAN */
   HAL_Delay(1000);

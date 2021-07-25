@@ -5,14 +5,9 @@
 
 /* Timer and PWM */
 #define TIM_PWM			htim3				// PWM/ISR timer handle
-#define TIM_CH_U		TIM_CHANNEL_1		// Terminal U timer channel
-#define TIM_CH_V		TIM_CHANNEL_2		// Terminal V timer channel
-#define TIM_CH_W		TIM_CHANNEL_3		// Terminal W timer channel
-#define INVERT_DTC		0					// PWM inverting (1) or non-inverting (0)
+#define TIM_CH_WH		TIM_CHANNEL_1		// Water heater timer channel
+#define TIM_CH_GH		TIM_CHANNEL_2		// Group heater timer channel
 
-/* ISRs */
-#define PWM_ISR			TIM1_UP_TIM10_IRQn	// PWM Timer ISR
-//#define CAN_ISR			CAN1_RX0_IRQn		// CAN Receive ISR
 
 /* ADC */
 
@@ -78,7 +73,13 @@
 #define B_LEAD				.7523f//(T_LEAD/(DT + T_LEAD))
 #define C_LEAD				10.0f//((ALPHA_LEAD*T_LEAD + DT)/(DT + T_LEAD))
 
+/* Temperature Control */
+
 #define P_MAX_HEATER	1300.0f		// Water max heating power (W)
 #define P_MAX_GROUP		100.0f		// Group max heating power (W)
+
+#define K_T_GROUP		15.0f		// W/C
+#define KD_T_GROUP		3.0f		// W/C/s
+#define KI_T_GROUP		0.05f		// 1/s
 
 #endif

@@ -17,18 +17,23 @@
 #include "gpio.h"
 #include "usb_comm.h"
 
+#define TANK_FLOW_MASK	0x00
+#define GROUP_FLOW_MASK	0x01
+#define DRIP_FLOW_MASK	0x02
+
 typedef struct{
 	/* Pressure/Flow/Temp Control */
 	/* Pressure/flow variables */
 	int adc_p_raw, adc_p_offset;
 	float loop_time;
+	int flow_sink;
 	float pressure, pressure_des, pressure_filt;		// Pascals
 	float pressure_error[2];
 	float pressure_error_int;
 	float lead[2];
 	float d_pressure, d_pressure_error, d_pressure_error_filt;	// Pascals/s
-	float flow_est, flow_est_filt, flow_des, flow_error;				// mL
-	float d_flow_est;									// mL/s
+	float flow_est, flow_est_filt, flow_des, flow_error, leak_flow;				// mL/s
+	float d_flow_est;									// mL/s/s
 	float volume;										// mL
 	union{
 		float motor_state[3];
@@ -50,6 +55,7 @@ typedef struct{
 	/* Group Temp */
 	float t_group, t_group_des, t_group_error;			// C
 	float d_t_group, d_t_group_error;					// C/s
+	float p_group_heater, t_group_int;					// W
 
 	int flag;
 } PFTCStruct;
@@ -61,6 +67,11 @@ void can_sample(PFTCStruct *pftc);
 void zero_sensors(PFTCStruct *pftc);
 void pressure_control(PFTCStruct *pftc);
 void update_flow_est(PFTCStruct *pftc);
+void flow_control(PFTCStruct *pftc);
+void group_temp_control(PFTCStruct *pftc);
+void heater_temp_control(PFTCStruct *pftc);
+void water_temp_control(PFTCStruct *pftc);
+void set_valves(PFTCStruct *pftc);
 float calc_ntc_temp(float r, float r_nom, float t1, float beta);
 float calc_rtd_temp(float r, float r_nom, float r_ref, float a, float b);
 void pump_enable(void);
