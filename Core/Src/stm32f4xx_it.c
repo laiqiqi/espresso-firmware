@@ -229,6 +229,7 @@ void TIM3_IRQHandler(void)
 	usb_data.out_floats[6] = pftc.vel_pump;
 	usb_data.out_floats[7] = pftc.torque_des_pump[0];
 	usb_data.out_floats[8] = pftc.torque_pump;
+	usb_data.out_floats[9] = pftc.weight;
 
 	uint8_t busy = CDC_Transmit_FS(usb_data.out_buff, 4*N_OUTPUT);
   /* USER CODE END TIM3_IRQn 0 */

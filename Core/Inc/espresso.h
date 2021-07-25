@@ -26,7 +26,9 @@ typedef struct{
 	/* Pressure/flow variables */
 	int adc_p_raw, adc_p_offset;
 	float loop_time;
-	int flow_sink;
+	int flow_dir;		// Flow direction (0 = tank, 1 = group, 2 = drip tray, 3 = water spout
+	int pump_cmd_type;	// 0 = disabled, 1 = pressure, 2 = flow, 3 = velocity
+	float pump_cmd;
 	float pressure, pressure_des, pressure_filt;		// Pascals
 	float pressure_error[2];
 	float pressure_error_int;
@@ -34,7 +36,8 @@ typedef struct{
 	float d_pressure, d_pressure_error, d_pressure_error_filt;	// Pascals/s
 	float flow_est, flow_est_filt, flow_des, flow_error, leak_flow;				// mL/s
 	float d_flow_est;									// mL/s/s
-	float volume;										// mL
+	float weight;										// g
+	int tare;
 	union{
 		float motor_state[3];
 		struct{
@@ -65,6 +68,7 @@ void analog_sample(PFTCStruct *ptfc);
 void spi_sample(PFTCStruct *ptfc);
 void can_sample(PFTCStruct *pftc);
 void zero_sensors(PFTCStruct *pftc);
+void pump_control(PFTCStruct *pftc);
 void pressure_control(PFTCStruct *pftc);
 void update_flow_est(PFTCStruct *pftc);
 void flow_control(PFTCStruct *pftc);
@@ -76,5 +80,7 @@ float calc_ntc_temp(float r, float r_nom, float t1, float beta);
 float calc_rtd_temp(float r, float r_nom, float r_ref, float a, float b);
 void pump_enable(void);
 void pump_disable(void);
+
+void fake_data(PFTCStruct *pftc);
 
 #endif /* INC_ESPRESSO_H_ */

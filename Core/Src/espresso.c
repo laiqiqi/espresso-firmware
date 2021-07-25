@@ -11,9 +11,14 @@
 #include "usart.h"
 
 void update_commands(PFTCStruct *pftc, USBDataStruct *data){
-	float pump_cmd = data->in_floats[0];
-	pftc->pressure_des =pump_cmd*PA_PER_BAR;
+	pftc->pump_cmd = data->in_floats[0];
 	pftc->t_water_des = data->in_floats[1];
+	pftc->t_group_des = data->in_floats[2];
+	pftc->pump_cmd_type = (int)data->in_floats[3];
+	pftc->flow_dir = (int)data->in_floats[4];
+	pftc->tare = (int)data->in_floats[5];
+
+	//pftc->pressure_des = pump_cmd*PA_PER_BAR;
 }
 
 
@@ -101,6 +106,30 @@ void zero_sensors(PFTCStruct *pftc){
 	pftc->adc_p_offset = adc_offset/n;
 
 }
+void pump_control(PFTCStruct *pftc){
+	/* run the appropriate type of pump control based on pump mode */
+	switch(pftc->pump_cmd_type){
+		case 0:
+			pftc->torque_des_pump[0] = 0.0f;
+			pftc->pressure_des = 0.0f;
+			pftc->k_vel_pump = 0.0f;
+			pftc->vel_des_pump = 0.0f;
+			break;
+		case 1:
+			pftc->pressure_des = pftc->pump_cmd;
+			pressure_control(pftc);
+			break;
+		case 2:
+			pftc->flow_des = pftc->pump_cmd;
+			flow_control(pftc);
+			break;
+		case 3:
+			pftc->k_vel_pump = .0005f;
+			pftc->vel_des_pump = pftc->pump_cmd;
+			break;
+
+	}
+}
 
 void pressure_control(PFTCStruct *pftc){
 	/* Shift values from last sample */
@@ -130,6 +159,8 @@ void update_flow_est(PFTCStruct *pftc){
 	pftc->leak_flow = (-C1_LEAK + sqrtf(C1_LEAK*C1_LEAK + 4.0f*C2_LEAK*pftc->pressure_filt))/(2.0f*C2_LEAK);
 	pftc->flow_est = flow_noleak - pftc->leak_flow;
 	pftc->flow_est_filt = .9f*pftc->flow_est_filt + .1f*pftc->flow_est;
+	pftc->weight += pftc->flow_est_filt*DT;
+	if(pftc->tare){pftc->weight = 0.0f;}
 }
 
 void flow_control(PFTCStruct *pftc){
@@ -167,7 +198,18 @@ void water_temp_control(PFTCStruct *pftc){
 }
 
 void set_valves(PFTCStruct *pftc){
-
+	switch(pftc->flow_dir){
+	case 0:			// Tank
+		break;
+	case 1:			// Group
+		break;
+	case 2:			// Drip tray
+		break;
+	case 3:			// Spout
+		break;
+	case 4:			// Steam
+		break;
+	}
 }
 
 float calc_ntc_temp(float r, float r_nom, float t1, float beta){
@@ -184,4 +226,9 @@ float calc_rtd_temp(float r, float r_nom, float r_ref, float a, float b){
 	float temp = Z2 + (Z3 * r);
 	temp = (sqrtf(temp) + Z1) / Z4;
 	return temp;
+}
+
+void fake_data(PFTCStruct *pftc){
+	/* Fakes sensor data for testing without hardware */
+
 }
