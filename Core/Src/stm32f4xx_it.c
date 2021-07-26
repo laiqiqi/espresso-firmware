@@ -216,7 +216,8 @@ void TIM3_IRQHandler(void)
 	spi_sample(&pftc);
 	analog_sample(&pftc);
 	can_sample(&pftc);
-	pressure_control(&pftc);
+	set_valves(&pftc);
+	pump_control(&pftc);
 	update_flow_est(&pftc);
 	group_temp_control(&pftc);
 

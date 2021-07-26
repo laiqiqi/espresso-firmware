@@ -43,7 +43,7 @@ void analog_sample(PFTCStruct *pftc){
 }
 
 void spi_sample(PFTCStruct *pftc){
-	/* Reads SPI sensors */
+	/* Reads SPI RTD */
 	pftc->rtd_spi_tx_buff[0] = 0x80;	// register
 	pftc->rtd_spi_tx_buff[1] = 0xD2;	//
 
@@ -198,18 +198,29 @@ void water_temp_control(PFTCStruct *pftc){
 }
 
 void set_valves(PFTCStruct *pftc){
+	int group_valve = 0;
+	int drip_valve = 0;
+	int steam_valve = 0;
+	int water_valve = 0;
 	switch(pftc->flow_dir){
 	case 0:			// Tank
 		break;
 	case 1:			// Group
+		group_valve = 1;
 		break;
 	case 2:			// Drip tray
+		group_valve = 1;
+		drip_valve = 1;
 		break;
 	case 3:			// Spout
 		break;
 	case 4:			// Steam
 		break;
 	}
+	HAL_GPIO_WritePin(GROUP_VALVE, group_valve);
+	HAL_GPIO_WritePin(DRIP_VALVE, drip_valve);
+	//HAL_GPIO_WritPin(STEAM_VALVE, steam_valve);
+	//HAL_GPIO_WritePin(WATER_VALVE, water_valve);
 }
 
 float calc_ntc_temp(float r, float r_nom, float t1, float beta){

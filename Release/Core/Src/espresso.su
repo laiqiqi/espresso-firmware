@@ -10,9 +10,9 @@ espresso.c:109:6:pump_control	0	static
 espresso.c:171:6:group_temp_control	24	static
 espresso.c:191:6:heater_temp_control	0	static
 espresso.c:196:6:water_temp_control	0	static
-espresso.c:200:6:set_valves	0	static
-espresso.c:215:7:calc_ntc_temp	24	static
+espresso.c:200:6:set_valves	8	static
+espresso.c:226:7:calc_ntc_temp	24	static
 espresso.c:25:6:analog_sample	32	static
 espresso.c:97:6:zero_sensors	16	static
-espresso.c:220:7:calc_rtd_temp	16	static
-espresso.c:231:6:fake_data	0	static
+espresso.c:231:7:calc_rtd_temp	16	static
+espresso.c:242:6:fake_data	0	static

@@ -8,7 +8,9 @@
 #define TIM_CH_WH		TIM_CHANNEL_1		// Water heater timer channel
 #define TIM_CH_GH		TIM_CHANNEL_2		// Group heater timer channel
 
-
+/* GPIO */
+#define GROUP_VALVE 	GPIOA, GPIO_PIN_9  // Switches flow between tank and group
+#define DRIP_VALVE	 	GPIOC, GPIO_PIN_7  // Opens/closes group to drip flow
 /* ADC */
 
 #define ADC_CH_MAIN		hadc1
@@ -17,10 +19,9 @@
 #define ADC_CH_TH		0
 #define ADC_CH_TG		hadc3
 
-/* DRV Gate drive */
-#define ENABLE_PIN 		GPIOA, GPIO_PIN_11  // Enable gate drive pin.
-#define DRV_SPI			hspi1				// DRV SPI handle
-#define DRV_CS			GPIOA, GPIO_PIN_4	// DRV CS pin
+/* SPI */
+#define SPI1_H			hspi3				// SPI handle
+#define SPI1_CS			GPIOB, GPIO_PIN_10	// CS pin
 
 /* CAN */
 #define CAN_H			hcan1		// CAN handle
@@ -47,7 +48,7 @@
 
 #define P_SCALE			333.982174f	// Pa per A/D count
 
-/* Filtesr */
+/* Filters */
 #define ALPHA_P			1.0f
 /* Pressure Control */
 #define DT					.00072f			// Loop period

@@ -155,8 +155,8 @@ int main(void)
 
   while (1)
   {
-	  //HAL_Delay(10);
-
+	  HAL_Delay(10);
+	  printf("%.2f  %.2f  %.2f  %d\r\n", pftc.pump_cmd, pftc.t_water_des, pftc.t_group_des, pftc.flow_dir);
 	  //pack_cmd(&can_tx, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f);	// Pack commands
 	  //HAL_CAN_AddTxMessage(&CAN_H, &can_tx.tx_header, can_tx.data, &TxMailbox);	// Send response
 	  //HAL_CAN_GetRxMessage(&CAN_H, CAN_RX_FIFO0, &can_rx.rx_header, can_rx.data);	// Read CAN
