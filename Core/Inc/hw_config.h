@@ -9,8 +9,8 @@
 #define TIM_CH_GH		TIM_CHANNEL_2		// Group heater timer channel
 
 /* GPIO */
-#define GROUP_VALVE 	GPIOA, GPIO_PIN_9  // Switches flow between tank and group
-#define DRIP_VALVE	 	GPIOC, GPIO_PIN_7  // Opens/closes group to drip flow
+#define DRIP_VALVE 		GPIOA, GPIO_PIN_9  // Switches flow between tank and group
+#define GROUP_VALVE	 	GPIOC, GPIO_PIN_7  // Opens/closes group to drip flow
 /* ADC */
 
 #define ADC_CH_MAIN		hadc1
@@ -52,11 +52,11 @@
 #define ALPHA_P			1.0f
 /* Pressure Control */
 #define DT					.00072f			// Loop period
-#define K_P					.15e-6f			// Pressure control loop gain
+#define K_P					.6e-6f			// Pressure control loop gain
 #define KD_P				.05*1e-4f
 #define KV_P				.002f;			// Speed loop gain, N-m/rad/s
-#define TI_P				.025f			// Pressure integrator time constant
-#define W_LEAD				250.0f			// Lead compensator max phase frequency
+#define TI_P				.055f			// Pressure integrator time constant
+#define W_LEAD				25.0f			// Lead compensator max phase frequency
 #define ALPHA_LEAD			10.0f			// Lead compensator pole/zero separation
 #define W_MAX				1000.0f			// Max speed
 #define LEAK				25.3f			// Rad/s/bar

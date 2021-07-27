@@ -116,7 +116,7 @@ void pump_control(PFTCStruct *pftc){
 			pftc->vel_des_pump = 0.0f;
 			break;
 		case 1:
-			pftc->pressure_des = pftc->pump_cmd;
+			pftc->pressure_des = pftc->pump_cmd*PA_PER_BAR;
 			pressure_control(pftc);
 			break;
 		case 2:
@@ -127,6 +127,9 @@ void pump_control(PFTCStruct *pftc){
 			pftc->k_vel_pump = .0005f;
 			pftc->vel_des_pump = pftc->pump_cmd;
 			break;
+		case 4:
+			pftc->k_vel_pump = 0.0f;
+			pftc->torque_des_pump[0] = pftc->pump_cmd;
 
 	}
 }
@@ -140,12 +143,12 @@ void pressure_control(PFTCStruct *pftc){
 	/* Feed-forward torque */
 	float t_ff = pftc->pressure_des * PRESSURE_TO_TORQUE;
 	/* PI + Lead */
-	//pftc->k_vel_pump = .0005f;
+	pftc->k_vel_pump = .00015f;
 	pftc->pressure_error[0] = pftc->pressure_des - pftc->pressure_filt;
 	pftc->d_pressure_error = (pftc->pressure_error[0] - pftc->pressure_error[1]);
 	pftc->d_pressure_error_filt = .9f*pftc->d_pressure_error_filt + .1f*pftc->d_pressure_error;
 	pftc->lead[0] = C_LEAD*pftc->pressure_error[0] - A_LEAD*pftc->pressure_error[1] + B_LEAD*pftc->lead[1];
-	pftc->torque_des_pump[0] = K_P*pftc->pressure_error[0] + pftc->pressure_error_int + 0*KD_P*pftc->d_pressure_error_filt + K_P*pftc->lead[0] + 0*t_ff;
+	pftc->torque_des_pump[0] = K_P*pftc->pressure_error[0] + pftc->pressure_error_int + 0*KD_P*pftc->d_pressure_error_filt + K_P*pftc->lead[0] + 0.0f*t_ff;
 	pftc->pressure_error_int += DT*K_P*pftc->pressure_error[0]/TI_P;
 
 	if(pftc->flag){
@@ -164,7 +167,7 @@ void update_flow_est(PFTCStruct *pftc){
 }
 
 void flow_control(PFTCStruct *pftc){
-	pftc->k_vel_pump = .0005f;
+	pftc->k_vel_pump = .002f;
 	pftc->vel_des_pump = (pftc->flow_des + pftc->leak_flow)/PUMP_DISP;
 }
 

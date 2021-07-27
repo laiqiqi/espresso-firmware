@@ -44,7 +44,7 @@ extern CAN_HandleTypeDef hcan1;
  #define KP_MIN 0.0f
  #define KP_MAX 500.0f
  #define KD_MIN 0.0f
- #define KD_MAX 1.0f
+ #define KD_MAX .01f
  #define T_MIN -KT*40.0f
  #define T_MAX KT*40.0f
 
