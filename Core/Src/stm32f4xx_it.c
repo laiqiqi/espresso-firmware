@@ -212,14 +212,19 @@ void TIM3_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM3_IRQn 0 */
 	pftc.loop_time += DT;
+	pftc.dither_counter += DT;
+	if(pftc.dither_counter > DITHER_PERIOD){
+		pftc.dither_counter = 0.0f;}
 	update_commands(&pftc, &usb_data);
 	spi_sample(&pftc);
 	analog_sample(&pftc);
+	update_temp_est(&pftc);
 	can_sample(&pftc);
 	set_valves(&pftc);
 	pump_control(&pftc);
 	update_flow_est(&pftc);
 	group_temp_control(&pftc);
+	water_temp_control(&pftc);
 
 	usb_data.out_floats[0] = pftc.loop_time;
 	usb_data.out_floats[1] = pftc.pressure_filt*BAR_PER_PA;
@@ -229,8 +234,10 @@ void TIM3_IRQHandler(void)
 	usb_data.out_floats[5] = pftc.t_group;
 	usb_data.out_floats[6] = pftc.vel_pump;
 	usb_data.out_floats[7] = pftc.torque_des_pump[0];
-	usb_data.out_floats[8] = pftc.torque_pump;
+	usb_data.out_floats[8] = pftc.t_water_int;//torque_pump;
 	usb_data.out_floats[9] = pftc.weight;
+	usb_data.out_floats[10] = pftc.p_group_heater;
+	usb_data.out_floats[11] = pftc.p_water_heater;
 
 	uint8_t busy = CDC_Transmit_FS(usb_data.out_buff, 4*N_OUTPUT);
   /* USER CODE END TIM3_IRQn 0 */

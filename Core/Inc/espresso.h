@@ -28,10 +28,12 @@ typedef struct{
 	float loop_time;
 	int flow_dir;		// Flow direction (0 = tank, 1 = group, 2 = drip tray, 3 = water spout
 	int pump_cmd_type;	// 0 = disabled, 1 = pressure, 2 = flow, 3 = velocity
+	int last_cmd_type;
 	float pump_cmd;
 	float pressure, pressure_des, pressure_filt;		// Pascals
 	float pressure_error[2];
 	float pressure_error_int;
+	float flow_error_int;
 	float lead[2];
 	float d_pressure, d_pressure_error, d_pressure_error_filt;	// Pascals/s
 	float flow_est, flow_est_filt, flow_des, flow_error, leak_flow;				// mL/s
@@ -50,15 +52,18 @@ typedef struct{
 	/* Water Temp */
 	uint8_t rtd_spi_tx_buff[2];
 	uint8_t rtd_spi_rx_buff[2];
-	float t_water, t_water_des, t_water_error;			// C
+	float t_water, t_water_des, t_water_error, t_water_int;			// C
+	float t_inlet;
 	float d_t_water, d_t_water_error;					// C/s
 	/* Heater Temp */
-	float t_heater, t_heater_des, t_heater_error;		// C
+	float t_heater, t_heater_des, t_heater_error, t_heater_int;		// C
 	float d_t_heater, d_t_heater_error;					// C/s
+	float p_water_heater, heater_cmd;
 	/* Group Temp */
-	float t_group, t_group_des, t_group_error;			// C
+	float t_group_est, t_group, t_group_des, t_group_error, t_group_sensor_est;			// C
 	float d_t_group, d_t_group_error;					// C/s
-	float p_group_heater, t_group_int;					// W
+	float group_cmd, p_group_heater, t_group_int;					// W
+	float dither_counter;
 
 	int flag;
 } PFTCStruct;
@@ -70,6 +75,7 @@ void can_sample(PFTCStruct *pftc);
 void zero_sensors(PFTCStruct *pftc);
 void pump_control(PFTCStruct *pftc);
 void pressure_control(PFTCStruct *pftc);
+void update_temp_est(PFTCStruct *pftc);
 void update_flow_est(PFTCStruct *pftc);
 void flow_control(PFTCStruct *pftc);
 void group_temp_control(PFTCStruct *pftc);

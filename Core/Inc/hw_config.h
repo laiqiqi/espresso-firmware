@@ -49,13 +49,15 @@
 #define P_SCALE			333.982174f	// Pa per A/D count
 
 /* Filters */
-#define ALPHA_P			1.0f
+#define ALPHA_P				1.0f
+#define CMD_FILT_ALPHA		.01f
 /* Pressure Control */
 #define DT					.00072f			// Loop period
-#define K_P					.6e-6f			// Pressure control loop gain
+#define K_P					.5e-6f			// Pressure control loop gain
 #define KD_P				.05*1e-4f
 #define KV_P				.002f;			// Speed loop gain, N-m/rad/s
-#define TI_P				.055f			// Pressure integrator time constant
+#define TI_P				.045f			// Pressure integrator time constant
+#define TI_F				.05f;			// Flow loop integrator time constant
 #define W_LEAD				25.0f			// Lead compensator max phase frequency
 #define ALPHA_LEAD			10.0f			// Lead compensator pole/zero separation
 #define W_MAX				1000.0f			// Max speed
@@ -75,12 +77,26 @@
 #define C_LEAD				10.0f//((ALPHA_LEAD*T_LEAD + DT)/(DT + T_LEAD))
 
 /* Temperature Control */
+#define CP_W			4.186f		// Water specific heat, J/g*K
+#define M_TH_GROUP		20.0f		// Group thermal mass, J/K
+#define R_TH_GROUP		2.7f		// Group thermal resitance, C/W
+#define T_AMB			25.0f		// Ambient temp, C (will measure later)
+#define K_GROUP_OBS		0.0003f		// Group temp observer gain
+#define KI_GROUP_OBS	.0001f		// Group temp observer integrator gain
+#define GROUP_HIST		.25f		// Temperature hysteresis
+#define DITHER_PERIOD	.11f
 
 #define P_MAX_HEATER	1300.0f		// Water max heating power (W)
 #define P_MAX_GROUP		100.0f		// Group max heating power (W)
+#define T_HEATER_MAX	125.0f		// Max heater temp (C)
 
-#define K_T_GROUP		15.0f		// W/C
-#define KD_T_GROUP		3.0f		// W/C/s
-#define KI_T_GROUP		0.05f		// 1/s
+#define K_T_GROUP		2.0f		// W/C
+#define KD_T_GROUP		3.5f		// W/C/s
+#define KI_T_GROUP		0.1f		// 1/s
 
+#define K_T_WATER		25.0f
+#define KD_T_WATER		60.0f
+#define KI_T_WATER		0.03f
+#define K_T_HEATER		50.0f
+#define KI_T_HEATER		0.0f
 #endif
